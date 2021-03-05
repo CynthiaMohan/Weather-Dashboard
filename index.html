@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"
+        integrity="sha384-vSIIfh2YWi9wW0r9iZe7RJPrKwp6bG+s9QZMoITbCckVJqGCCRhc+ccxNcdpHuYu" crossorigin="anonymous">
+    <link rel="stylesheet" href="./assets/css/styles.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="navbar navbar-light bg-dark justify-content-center mb-5">
+        <h1>Weather Dashboard</h1>
+    </header>
+    <div class="container">
+        <section class="row">
+            <!-- search and Search Histor -->
+            <div class="col-4">
+                <div class="d-inline-flex">
+                    <form action="submit" id="search-form">
+                        <label for="searchForCity" id="searchCity" class="col">Search for a city</label>
+                        <div class="d-flex flex-row bd-highlight mb-5">
+                            <input class="form-control" type="text" placeholder="Enter City" id="searchForCity"
+                                class="p-2 bd-highlight">
+
+                            <button type="submit" class="btn btn-primary" data-bs-toggle="tooltip"
+                                data-bs-placement="top" title="Seach"><i
+                                    class="fas fa-search p-2 bd-highlight"></i></button>
+                        </div>
+                    </form>
+                </div>
+                <div class="row">
+                    <!-- List of previously searched cities from local storage -->
+                    <ul class="search-list list-group">
+
+                    </ul>
+                </div>
+            </div>
+            <!-- Searched data for today and 5-day forecast -->
+            <div class="col-8">
+                <div class="row">
+                    <h2 id="display-areaname fs-2">Searched city's Climate Data</h2>
+                    <div class="climate-data mb-5">
+                        <div class="temp mb-3 fs-3">Temperature :<span></span></div>
+                        <div class="humidity mb-3 fs-3">Humidity :<span></span></div>
+                        <div class="windspeed mb-3 fs-3">windspeed :<span></span></div>
+                        <div class="uvindex mb-3 fs-3">UV Index :<span></span></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <h2>5-Day Forecast</h2>
+                </div>
+            </div>
+        </section>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js"
+        integrity="sha384-KsvD1yqQ1/1+IA7gi3P0tyJcT3vR+NdBTt13hSJ2lnve8agRGXTTyNaBYmCR/Nwi"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.min.js"
+        integrity="sha384-nsg8ua9HAw1y0W1btsyWgBklPnCUAFLuTMS2G72MMONqmOymq585AcH49TLBQObG"
+        crossorigin="anonymous"></script>
+    <script src="./assets/js/app.js"></script>
+</body>
+
+</html>
