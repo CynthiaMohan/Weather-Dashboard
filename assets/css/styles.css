@@ -2,3 +2,12 @@ header{
     color: white;
     text-align: center;
 }
+.hidden{
+    display: none;
+}
+#searchcity{
+    margin-right: 10px;
+}
+#date{
+    margin-right: 10px;
+}

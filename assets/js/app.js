@@ -7,7 +7,11 @@ let tempEl = document.querySelector('.temp');
 let humidityEl = document.querySelector('.humidity');
 let windspeedEl = document.querySelector('.windspeed');
 let uvindexEl = document.querySelector('.uvindex');
+let searchCityDisplayEl = document.querySelector('#searchcity');
+let dateEl = document.querySelector('#date');
+let dataEl = document.querySelector('#data');
 let areas = [];
+let lat, lon;
 
 //api url
 const API_key = 'b2291366fe0fa0dd2bc42b199a8c4e41';
@@ -26,6 +30,7 @@ let getWeatherData = function (searchArea) {
             if (response.ok) {
                 response.json().then(function (data) {
                     console.log(data);
+                    searchCityDisplayEl.innerText = data.name;
                     let temperature = data.main.temp;
                     let humidity = data.main.humidity;
                     let windSpeed = data.wind.speed;
@@ -36,8 +41,9 @@ let getWeatherData = function (searchArea) {
                     console.log(`WindSpeed : ${windSpeed}`);
                     windspeedEl.innerText = windSpeed;
 
-                    let lat = data.coord.lat;
-                    let lon = data.coord.lon;
+                    lat = data.coord.lat;
+                    lon = data.coord.lon;
+                    console.log(lat, lon);
                 });
             }
             else {
@@ -47,21 +53,20 @@ let getWeatherData = function (searchArea) {
         .catch(function (error) {
             alert(`Unable to connect to Open Weather`);
         });
+    // fetch(`http://api.openweathermap.org/data/2.5/uvi?lat=${lat}&lon=${lon}&appid=${API_key}`)
+    //     .then(function (response) {
+    //         console.log(response);
 
-    fetch(`http://api.openweathermap.org/data/2.5/uvi?lat=${lat}&lon=${lon}&appid=${API_key}`)
+    // });
+};
+let get5DayForcast = function (searchArea) {
+    // let forecastApiUrl = `api.openweathermap.org/data/2.5/forecast?q=${searchArea}&appid=${API_key}`;
+
+    fetch(`api.openweathermap.org/data/2.5/forecast?q=${searchArea}&appid=${API_key}`)
         .then(function (response) {
             console.log(response);
-
-        }
+        });
 };
-// let get5DayForcast = function (searchArea) {
-//     let forecastApiUrl = `api.openweathermap.org/data/2.5/forecast?q=${searchArea}&appid=${API_key}`;
-
-//     fetch(forecastApiUrl)
-//         .then(function (response) {
-//             console.log(response);
-//         });
-// };
 let i = 0;
 //Save the searched area name in local storage
 let saveSearch = function (searchArea) {
@@ -88,16 +93,18 @@ let displaySearch = function (searchArea) {
 //Search Form Handler
 let searchFormHandler = function (event) {
     event.preventDefault();
+    dataEl.classList.remove("hidden");
     console.log(event); //Submit event
     let searchedArea = userSearchEl.value;
     console.log(searchedArea);//foster city
-
+    let date = moment().format("L");
+    dateEl.innerText = date;
     if (searchedArea) {
         // debugger;
         saveSearch(searchedArea);
         displaySearch(searchedArea);
         getWeatherData(searchedArea);
-        userSearchEl.value = ' ';
+        userSearchEl.value = '';
         // get5DayForcast(searchedArea);
     }
     else {
