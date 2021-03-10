@@ -7,7 +7,7 @@ let temp = document.querySelector('.temp');
 let humidity = document.querySelector('.humidity');
 let windspeed = document.querySelector('.windspeed');
 let uvindex = document.querySelector('.uvindex');
-
+let areas = [];
 
 //api url
 const API_key = 'df55f4eee967881d933a0281758e9b21';
@@ -21,18 +21,36 @@ let getWeatherData = function (searchArea) {
     // api.openweathermap.org / data / 2.5 / weather ? q = London, uk & APPID=df55f4eee967881d933a0281758e9b21
 
     //fetch the data by making a request to the url
-    fetch(apiUrl).then(function (response) {
-        response.json().then(function (data) {
-            console.log(data);
-            displayClimateData(searchArea, data);
+    fetch(apiUrl)
+        .then(function (response) {
+            if (response.ok) {
+                response.json().then(function (data) {
+                    console.log(data.temp);
+                    // displayClimateData(searchArea, data);
+                });
+            }
+            else {
+                alert(`Error:${response.statusText}`);
+            }
+        })//end of then
+        .catch(function (error) {
+            alert(`Unable to connect to Open Weather`);
         });
-    });
 };
+let get5DayForcast = function (searchArea) {
+    let apiUrl = `api.openweathermap.org/data/2.5/forecast?q=${searchArea}&appid=${API_key}`;
 
+    fetch(apiUrl)
+        .then(function (response) {
+            console.log(response);
+        });
+};
+let i = 0;
 //Save the searched area name in local storage
 let saveSearch = function (searchArea) {
-    // let areas = [];
-    localStorage.setItem("areas", searchArea);
+
+    localStorage.setItem(i, searchArea);
+    i++;
 };
 
 let displaySearch = function (searchArea) {
@@ -57,6 +75,7 @@ let searchFormHandler = function (event) {
         displaySearch(searchedArea);
         getWeatherData(searchedArea);
         userSearchEl.value = ' ';
+        get5DayForcast(searchedArea);
     }
     else {
         alert("Please enter a valid city name, state code or country code");
@@ -64,13 +83,13 @@ let searchFormHandler = function (event) {
 };
 
 //Display the retrieved Climate Data
-let displayClimateData = function (searchArea, climateData) {
-    displayArea.textContent = `${searchArea}'s Climate is`;
+// let displayClimateData = function (searchArea, climateData) {
+//     displayArea.textContent = `${searchArea}'s Climate is`;
 
-    //display climate data
-    console.log(climateData.base);
+//     //display climate data
+//     console.log(climateData.base);
 
 
-};
+// };
 
 searchFormEl.addEventListener("submit", searchFormHandler);
