@@ -10,9 +10,19 @@ let uvindexEl = document.querySelector('.uvindex');
 let searchCityDisplayEl = document.querySelector('#searchcity');
 let dateEl = document.querySelector('#date');
 let dataEl = document.querySelector('#data');
+let iconEl = document.querySelector('#icon');
 let areas = [];
 let lat, lon;
-
+let weatherIcon = [
+    {
+        w: 'cloudy',
+        icon: '<i class="fas fa-cloud-sun"></i>'
+    },
+    {
+        w: 'clear',
+        icon: '<i class="fas fa-sun"></i>'
+    }
+];
 //api url
 const API_key = 'b2291366fe0fa0dd2bc42b199a8c4e41';
 
@@ -31,6 +41,8 @@ let getWeatherData = function (searchArea) {
                 response.json().then(function (data) {
                     console.log(data);
                     searchCityDisplayEl.innerText = data.name;
+                    console.log(data.weather[0].main);
+                    iconEl.innerHTML = ` <i class="fas fa-${data.weather[0].main}"></i>`;
                     let temperature = data.main.temp;
                     let humidity = data.main.humidity;
                     let windSpeed = data.wind.speed;
@@ -40,10 +52,24 @@ let getWeatherData = function (searchArea) {
                     humidityEl.innerText = humidity;
                     console.log(`WindSpeed : ${windSpeed}`);
                     windspeedEl.innerText = windSpeed;
+                    //check weather
 
                     lat = data.coord.lat;
                     lon = data.coord.lon;
                     console.log(lat, lon);
+                    fetch(`http://api.openweathermap.org/data/2.5/uvi?lat=${lat}&lon=${lon}&appid=${API_key}`)
+                        .then(function (response) {
+                            if (response) {
+                                response.json().then(function (data) {
+                                    console.log(data.value);
+                                    uvindexEl.innerText = data.value;
+                                });
+                            }
+                            else {
+                                alert(`Error:${response.statusText}`);
+                            }
+                        });
+
                 });
             }
             else {
@@ -53,11 +79,7 @@ let getWeatherData = function (searchArea) {
         .catch(function (error) {
             alert(`Unable to connect to Open Weather`);
         });
-    // fetch(`http://api.openweathermap.org/data/2.5/uvi?lat=${lat}&lon=${lon}&appid=${API_key}`)
-    //     .then(function (response) {
-    //         console.log(response);
 
-    // });
 };
 let get5DayForcast = function (searchArea) {
     // let forecastApiUrl = `api.openweathermap.org/data/2.5/forecast?q=${searchArea}&appid=${API_key}`;
@@ -76,20 +98,26 @@ let saveSearch = function (searchArea) {
 };
 
 let displaySearch = function (searchArea) {
-    if (i !== 0) {
-        for (let index = 0; index < i; index++) {
-            localStorage.getItem(searchArea[i]);
-            console.log(searchArea);
-            let listEl = document.createElement("a");
-            listEl.setAttribute('href', "#");
-            listEl.classList.add("list-group-item");
-            listEl.innerText = searchArea;
-            console.log(listEl);
-            searchListEl.appendChild(listEl);
-        }
+    if (i === 0) {
+        console.log("No elements in Local Storage");
     }
 
+
+    localStorage.getItem(searchArea[i]);
+    console.log(searchArea);
+    let listEl = document.createElement("a");
+    listEl.setAttribute('href', "#");
+    listEl.classList.add("list-group-item");
+    listEl.classList.add("list-element")
+    listEl.innerText = searchArea;
+    console.log(listEl);
+    searchListEl.appendChild(listEl);
+
+
+
 };
+
+
 //Search Form Handler
 let searchFormHandler = function (event) {
     event.preventDefault();
