@@ -11,18 +11,8 @@ let searchCityDisplayEl = document.querySelector('#searchcity');
 let dateEl = document.querySelector('#date');
 let dataEl = document.querySelector('#data');
 let iconEl = document.querySelector('#icon');
-let areas = [];
 let lat, lon;
-let weatherIcon = [
-    {
-        w: 'cloudy',
-        icon: '<i class="fas fa-cloud-sun"></i>'
-    },
-    {
-        w: 'clear',
-        icon: '<i class="fas fa-sun"></i>'
-    }
-];
+
 //api url
 const API_key = 'b2291366fe0fa0dd2bc42b199a8c4e41';
 
@@ -42,7 +32,7 @@ let getWeatherData = function (searchArea) {
                     console.log(data);
                     searchCityDisplayEl.innerText = data.name;
                     console.log(data.weather[0].main);
-                    iconEl.innerHTML = ` <i class="fas fa-${data.weather[0].main}"></i>`;
+                    // iconEl.innerHTML = ` <i class="fas fa-${data.weather[0].main}"></i>`;
                     let temperature = data.main.temp;
                     let humidity = data.main.humidity;
                     let windSpeed = data.wind.speed;
@@ -53,7 +43,7 @@ let getWeatherData = function (searchArea) {
                     console.log(`WindSpeed : ${windSpeed}`);
                     windspeedEl.innerText = windSpeed;
                     //check weather
-
+                    currentWeatherImg(searchArea);
                     lat = data.coord.lat;
                     lon = data.coord.lon;
                     console.log(lat, lon);
@@ -81,12 +71,25 @@ let getWeatherData = function (searchArea) {
         });
 
 };
+
+let currentWeatherImg = function (searchArea) {
+    fetch(`http://api.weatherstack.com/current?access_key=09a266bbc7a05f11da423c2c5484f2d6&query=${searchArea}`)
+        .then(function (response) {
+            if (response.ok) {
+                response.json().then(function (data) {
+                    console.log(data.current.weather_icons[0]);
+                    iconEl.setAttribute("src", data.current.weather_icons[0]);
+                    iconEl.setAttribute("alt", "Icon showing the current weather");
+                });
+            }
+        });
+};
 let get5DayForcast = function (searchArea) {
     // let forecastApiUrl = `api.openweathermap.org/data/2.5/forecast?q=${searchArea}&appid=${API_key}`;
 
     fetch(`api.openweathermap.org/data/2.5/forecast?q=${searchArea}&appid=${API_key}`)
         .then(function (response) {
-            console.log(response);
+
         });
 };
 let i = 0;
