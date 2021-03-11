@@ -51,7 +51,7 @@ let getWeatherData = function (searchArea) {
                         .then(function (response) {
                             if (response) {
                                 response.json().then(function (data) {
-                                    console.log(data.value);
+                                    // console.log(data.value);
                                     uvindexEl.innerText = data.value;
                                 });
                             }
@@ -87,9 +87,9 @@ let currentWeatherImg = function (searchArea) {
 let get5DayForcast = function (searchArea) {
     // let forecastApiUrl = `api.openweathermap.org/data/2.5/forecast?q=${searchArea}&appid=${API_key}`;
 
-    fetch(`api.openweathermap.org/data/2.5/forecast?q=${searchArea}&appid=${API_key}`)
+    fetch(`api.openweathermap.org/data/2.5/forecast?q=London,us&mode=xml&appid=${API_key}`)
         .then(function (response) {
-
+            console.log(response);
         });
 };
 let i = 0;
@@ -136,7 +136,7 @@ let searchFormHandler = function (event) {
         displaySearch(searchedArea);
         getWeatherData(searchedArea);
         userSearchEl.value = '';
-        // get5DayForcast(searchedArea);
+        get5DayForcast(searchedArea);
     }
     else {
         alert("Please enter a valid city name, state code or country code");
