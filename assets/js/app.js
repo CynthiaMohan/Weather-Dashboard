@@ -73,18 +73,6 @@ let getWeatherData = function (searchArea) {
 
 };
 
-// let currentWeatherImg = function (searchArea) {
-//     fetch(`http://api.weatherstack.com/current?access_key=09a266bbc7a05f11da423c2c5484f2d6&query=${searchArea}`)
-//         .then(function (response) {
-//             if (response.ok) {
-//                 response.json().then(function (data) {
-//                     console.log(data.current.weather_icons[0]);
-//                     iconEl.setAttribute("src", data.current.weather_icons[0]);
-//                     iconEl.setAttribute("alt", "Icon showing the current weather");
-//                 });
-//             }
-//         });
-// };
 let get5DayForcast = function (searchArea) {
     // let forecastApiUrl = `api.openweathermap.org/data/2.5/forecast?q=${searchArea}&appid=${API_key}`;
 
@@ -100,16 +88,17 @@ let saveSearch = function (searchArea) {
     i++;
 };
 let index = i;
-let displaySearch = function (searchArea) {
-    if (i <= 0) {
-        console.log("No elements in Local Storage");
-    }
+let searchLog = function (searchArea) {
+
+
     console.log(index);
     let listEl = document.createElement("a");
     listEl.setAttribute('href', "#");
     listEl.classList.add("list-group-item");
     listEl.classList.add("list-element")
-    listEl.innerText = searchArea;
+    if (index === 0) {
+        listEl.innerText = searchArea;
+    }
     console.log(listEl);
     searchListEl.appendChild(listEl);
 };
@@ -127,13 +116,13 @@ let searchFormHandler = function (event) {
     if (searchedArea) {
         // debugger;
         saveSearch(searchedArea);
-        displaySearch(searchedArea);
+        searchLog(searchedArea);
         getWeatherData(searchedArea);
         userSearchEl.value = '';
         get5DayForcast(searchedArea);
     }
     else {
-        alert("Please enter a valid city name, state code or country code");
+        alert("Please enter a valid city name");
     }
 };
 
