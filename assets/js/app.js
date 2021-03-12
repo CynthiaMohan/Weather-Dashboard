@@ -11,6 +11,7 @@ let searchCityDisplayEl = document.querySelector('#searchcity');
 let dateEl = document.querySelector('#date');
 let dataEl = document.querySelector('#data');
 let weatherIconEl = document.querySelector('#weatherIcon');
+let searchLogBtn = document.querySelector('#search-log')
 let lat, lon;
 
 //api url
@@ -92,8 +93,8 @@ let searchLog = function (searchArea) {
 
 
     console.log(index);
-    let listEl = document.createElement("a");
-    listEl.setAttribute('href', "#");
+    let listEl = document.createElement("button");
+    listEl.setAttribute('type', "submit");
     listEl.classList.add("list-group-item");
     listEl.classList.add("list-element")
     if (index === 0) {
@@ -137,3 +138,8 @@ let searchFormHandler = function (event) {
 // };
 
 searchFormEl.addEventListener("submit", searchFormHandler);
+
+searchLogBtn.addEventListener("click", function (event) {
+    let search = event.target.innerText;
+    getWeatherData(search);
+});
