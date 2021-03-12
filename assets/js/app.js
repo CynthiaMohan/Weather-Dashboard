@@ -10,7 +10,7 @@ let uvindexEl = document.querySelector('.uvindex');
 let searchCityDisplayEl = document.querySelector('#searchcity');
 let dateEl = document.querySelector('#date');
 let dataEl = document.querySelector('#data');
-let iconEl = document.querySelector('#icon');
+let weatherIconEl = document.querySelector('#weatherIcon');
 let lat, lon;
 
 //api url
@@ -32,7 +32,8 @@ let getWeatherData = function (searchArea) {
                     console.log(data);
                     searchCityDisplayEl.innerText = data.name;
                     console.log(data.weather[0].main);
-                    // iconEl.innerHTML = ` <i class="fas fa-${data.weather[0].main}"></i>`;
+                    let wicon = data.weather[0].icon;
+                    let iconUrl = `http://openweathermap.org/img/w/${wicon}.png`;
                     let temperature = data.main.temp;
                     let humidity = data.main.humidity;
                     let windSpeed = data.wind.speed;
@@ -42,8 +43,8 @@ let getWeatherData = function (searchArea) {
                     humidityEl.innerText = humidity;
                     console.log(`WindSpeed : ${windSpeed}`);
                     windspeedEl.innerText = windSpeed;
-                    //check weather
-                    currentWeatherImg(searchArea);
+                    //weather icon
+                    weatherIconEl.setAttribute("src", iconUrl);
                     lat = data.coord.lat;
                     lon = data.coord.lon;
                     console.log(lat, lon);
@@ -72,42 +73,38 @@ let getWeatherData = function (searchArea) {
 
 };
 
-let currentWeatherImg = function (searchArea) {
-    fetch(`http://api.weatherstack.com/current?access_key=09a266bbc7a05f11da423c2c5484f2d6&query=${searchArea}`)
-        .then(function (response) {
-            if (response.ok) {
-                response.json().then(function (data) {
-                    console.log(data.current.weather_icons[0]);
-                    iconEl.setAttribute("src", data.current.weather_icons[0]);
-                    iconEl.setAttribute("alt", "Icon showing the current weather");
-                });
-            }
-        });
-};
+// let currentWeatherImg = function (searchArea) {
+//     fetch(`http://api.weatherstack.com/current?access_key=09a266bbc7a05f11da423c2c5484f2d6&query=${searchArea}`)
+//         .then(function (response) {
+//             if (response.ok) {
+//                 response.json().then(function (data) {
+//                     console.log(data.current.weather_icons[0]);
+//                     iconEl.setAttribute("src", data.current.weather_icons[0]);
+//                     iconEl.setAttribute("alt", "Icon showing the current weather");
+//                 });
+//             }
+//         });
+// };
 let get5DayForcast = function (searchArea) {
     // let forecastApiUrl = `api.openweathermap.org/data/2.5/forecast?q=${searchArea}&appid=${API_key}`;
 
-    fetch(`api.openweathermap.org/data/2.5/forecast?q=London,us&mode=xml&appid=${API_key}`)
-        .then(function (response) {
-            console.log(response);
-        });
+    // fetch(`api.openweathermap.org/data/2.5/forecast?q=London,us&mode=xml&appid=${API_key}`)
+    //     .then(function (response) {
+    //         console.log(response);
+    //     });
 };
 let i = 0;
 //Save the searched area name in local storage
 let saveSearch = function (searchArea) {
-
     localStorage.setItem(i, searchArea);
     i++;
 };
-
+let index = i;
 let displaySearch = function (searchArea) {
-    if (i === 0) {
+    if (i <= 0) {
         console.log("No elements in Local Storage");
     }
-
-
-    localStorage.getItem(searchArea[i]);
-    console.log(searchArea);
+    console.log(index);
     let listEl = document.createElement("a");
     listEl.setAttribute('href', "#");
     listEl.classList.add("list-group-item");
@@ -115,9 +112,6 @@ let displaySearch = function (searchArea) {
     listEl.innerText = searchArea;
     console.log(listEl);
     searchListEl.appendChild(listEl);
-
-
-
 };
 
 
@@ -125,9 +119,9 @@ let displaySearch = function (searchArea) {
 let searchFormHandler = function (event) {
     event.preventDefault();
     dataEl.classList.remove("hidden");
-    console.log(event); //Submit event
+    // console.log(event); //Submit event
     let searchedArea = userSearchEl.value;
-    console.log(searchedArea);//foster city
+    // console.log(searchedArea);//foster city
     let date = moment().format("L");
     dateEl.innerText = date;
     if (searchedArea) {
