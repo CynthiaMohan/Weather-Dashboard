@@ -90,8 +90,6 @@ let saveSearch = function (searchArea) {
 };
 let index = i;
 let searchLog = function (searchArea) {
-
-
     console.log(index);
     let listEl = document.createElement("button");
     listEl.setAttribute('type', "submit");
