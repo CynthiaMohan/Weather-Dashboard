@@ -1,4 +1,3 @@
-// let searchFormEl = document.querySelector('#search-form');
 let userSearchEl = document.querySelector('#searchForCity');
 let displayArea = document.querySelector('#display-areaname');
 let searchListEl = document.querySelector('.search-list');
@@ -14,19 +13,12 @@ let weatherIconEl = document.querySelector('#weatherIcon');
 let searchLogBtn = document.querySelector('#search-log')
 let searchBtn = document.querySelector('#searchBtn')
 let lat, lon;
-
+let searchArray = [];
 //api url
 const API_key = 'c55a6a193fb103621798dce241c8f1d3';
 
 //Gather the search data
 let getWeatherData = function (searchArea) {
-    console.log("started fetch");
-    console.log(searchArea);
-    console.log(API_key);
-    //set the Url
-    // let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${searchArea}&appid=${API_key}`;
-
-    // api.openweathermap.org / data / 2.5 / weather ? q = London, uk & APPID=df55f4eee967881d933a0281758e9b21
 
     //fetch the data by making a request to the url
     fetch(`https://api.openweathermap.org/data/2.5/weather?q=${searchArea}&appid=${API_key}&units=imperial`)
@@ -114,40 +106,39 @@ let get5DayForcast = function (searchArea) {
     //         console.log(response);
     //     });
 };
+
+
+let searchLog = function () {
+    for (let i = 0; i < localStorage.length; i++) {
+        let key = localStorage.key(i);
+        // console.log(localStorage.getItem(key));
+        let currentSearchArea = JSON.parse(localStorage.getItem(key));
+        let listEl = document.createElement("button");
+        listEl.classList.add("list-group-item");
+        listEl.classList.add("list-element")
+        listEl.innerText = currentSearchArea;
+        console.log(listEl);
+        searchListEl.appendChild(listEl);
+    }
+
+};
+
 let i = 0;
-//Save the searched area name in local storage
-let saveSearch = function (searchArea) {
-    localStorage.setItem(i, searchArea);
-    i++;
-};
-
-let searchLog = function (searchArea) {
-    // for (i = 0; i < localStorage.length; i++) {
-    //     let key = localStorage.key(i);
-    //     console.log(localStorage.getItem(key));
-    // }
-    let listEl = document.createElement("button");
-    // listEl.setAttribute('type', "submit");
-    listEl.classList.add("list-group-item");
-    listEl.classList.add("list-element")
-    listEl.innerText = searchArea;
-    console.log(listEl);
-    searchListEl.appendChild(listEl);
-};
-
-
 //Search Form Handler
 let searchFormHandler = function () {
+
     dataEl.classList.remove("hidden");
     // console.log(event); //Submit event
     let searchedArea = userSearchEl.value;
-    console.log(searchedArea);//foster city
+    // searchArray[i] = searchedArea;
+    i++;
+    localStorage.setItem(i, JSON.stringify(searchedArea));
+    searchLog();
+
+    console.log(searchArray);//foster city
     let date = moment().format("L");
     dateEl.innerText = date;
     if (searchedArea) {
-        // debugger;
-        saveSearch(searchedArea);
-        searchLog(searchedArea);
         getWeatherData(searchedArea);
         userSearchEl.value = '';
         // get5DayForcast(searchedArea);
@@ -159,17 +150,10 @@ let searchFormHandler = function () {
 
 };
 
-//Display the retrieved Climate Data
-// let displayClimateData = function (searchArea, climateData) {
-//     displayArea.textContent = `${searchArea}'s Climate is`;
+searchBtn.addEventListener("click", function () {
+    searchFormHandler();
 
-//     //display climate data
-//     console.log(climateData.base);
-
-
-// };
-
-searchBtn.addEventListener("click", searchFormHandler);
+});
 
 searchLogBtn.addEventListener("click", function (event) {
     event.preventDefault();
