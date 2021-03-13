@@ -22,18 +22,18 @@
         <section class="row ">
             <!-- search and Search Histor -->
             <div class="col-4 bg-light">
-                <div class="d-inline-flex">
-                    <form action="submit" id="search-form">
-                        <label for="searchForCity" id="searchCity" class="col">Search for a city</label>
-                        <div class="d-flex flex-row bd-highlight mb-5">
-                            <input class="form-control" type="text" placeholder="Enter City" id="searchForCity"
-                                class="p-2 bd-highlight">
+                <div class="d-flex flex-column">
+                    <!-- <form action="submit" id="search-form"> -->
+                    <label for="searchForCity" id="searchCity" class="col mt-3 mb-2">Search for a city</label>
+                    <div class="d-flex flex-row bd-highlight mb-5">
 
-                            <button type="submit" class="btn btn-primary" data-bs-toggle="tooltip"
-                                data-bs-placement="top" title="Seach"><i
-                                    class="fas fa-search p-2 bd-highlight"></i></button>
-                        </div>
-                    </form>
+                        <input class="form-control" type="text" placeholder="Enter City" id="searchForCity"
+                            class="p-2 bd-highlight">
+
+                        <button id="searchBtn" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="Seach"><i class="fas fa-search p-2 bd-highlight"></i></button>
+                    </div>
+                    <!-- </form> -->
                 </div>
                 <div class="row">
                     <!-- List of previously searched cities from local storage -->

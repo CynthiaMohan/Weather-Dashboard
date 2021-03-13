@@ -21,3 +21,27 @@ header{
 #weatherIcon{
     width: 100px;
 }
+#searchForCity{
+    width: 300px;
+}
+
+.red{
+    background-color:red;
+    color: white;
+    border-radius: 5px;
+}
+.orange{
+    background-color: orangered;
+    color: whitesmoke;
+    border-radius: 5px;
+}
+.green{
+    background-color: green;
+    color: white;
+    border-radius: 5px;
+}
+.yellow{
+    background-color: yellow;
+    color: black;
+    border-radius: 5px;
+}

@@ -1,4 +1,4 @@
-let searchFormEl = document.querySelector('#search-form');
+// let searchFormEl = document.querySelector('#search-form');
 let userSearchEl = document.querySelector('#searchForCity');
 let displayArea = document.querySelector('#display-areaname');
 let searchListEl = document.querySelector('.search-list');
@@ -12,14 +12,17 @@ let dateEl = document.querySelector('#date');
 let dataEl = document.querySelector('#data');
 let weatherIconEl = document.querySelector('#weatherIcon');
 let searchLogBtn = document.querySelector('#search-log')
+let searchBtn = document.querySelector('#searchBtn')
 let lat, lon;
 
 //api url
-const API_key = 'b2291366fe0fa0dd2bc42b199a8c4e41';
+const API_key = 'c55a6a193fb103621798dce241c8f1d3';
 
 //Gather the search data
 let getWeatherData = function (searchArea) {
-
+    console.log("started fetch");
+    console.log(searchArea);
+    console.log(API_key);
     //set the Url
     // let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${searchArea}&appid=${API_key}`;
 
@@ -28,6 +31,7 @@ let getWeatherData = function (searchArea) {
     //fetch the data by making a request to the url
     fetch(`https://api.openweathermap.org/data/2.5/weather?q=${searchArea}&appid=${API_key}&units=imperial`)
         .then(function (response) {
+            console.log(response);
             if (response.ok) {
                 response.json().then(function (data) {
                     console.log(data);
@@ -54,7 +58,34 @@ let getWeatherData = function (searchArea) {
                             if (response) {
                                 response.json().then(function (data) {
                                     // console.log(data.value);
+                                    uvindexEl.classList.remove("green");
+                                    uvindexEl.classList.remove("yellow");
+                                    uvindexEl.classList.remove("orange");
+                                    uvindexEl.classList.remove("red");
                                     uvindexEl.innerText = data.value;
+                                    switch (Math.floor(data.value)) {
+                                        case 0:
+                                        case 1:
+                                        case 2:
+                                            uvindexEl.classList.add("green");
+                                            break;
+                                        case 3:
+                                        case 4:
+                                        case 5:
+                                            uvindexEl.classList.add("yellow");
+                                            break;
+                                        case 6:
+                                        case 7:
+                                            uvindexEl.classList.add("orange");
+                                            break;
+                                        case 8:
+                                        case 9:
+                                        case 10:
+                                            uvindexEl.classList.add("red");
+                                            break;
+                                        default:
+                                            break;
+                                    }
                                 });
                             }
                             else {
@@ -69,6 +100,7 @@ let getWeatherData = function (searchArea) {
             }
         })//end of then
         .catch(function (error) {
+            console.log(error);
             alert(`Unable to connect to Open Weather`);
         });
 
@@ -88,28 +120,28 @@ let saveSearch = function (searchArea) {
     localStorage.setItem(i, searchArea);
     i++;
 };
-let index = i;
+
 let searchLog = function (searchArea) {
-    console.log(index);
+    // for (i = 0; i < localStorage.length; i++) {
+    //     let key = localStorage.key(i);
+    //     console.log(localStorage.getItem(key));
+    // }
     let listEl = document.createElement("button");
-    listEl.setAttribute('type', "submit");
+    // listEl.setAttribute('type', "submit");
     listEl.classList.add("list-group-item");
     listEl.classList.add("list-element")
-    if (index === 0) {
-        listEl.innerText = searchArea;
-    }
+    listEl.innerText = searchArea;
     console.log(listEl);
     searchListEl.appendChild(listEl);
 };
 
 
 //Search Form Handler
-let searchFormHandler = function (event) {
-    event.preventDefault();
+let searchFormHandler = function () {
     dataEl.classList.remove("hidden");
     // console.log(event); //Submit event
     let searchedArea = userSearchEl.value;
-    // console.log(searchedArea);//foster city
+    console.log(searchedArea);//foster city
     let date = moment().format("L");
     dateEl.innerText = date;
     if (searchedArea) {
@@ -118,11 +150,13 @@ let searchFormHandler = function (event) {
         searchLog(searchedArea);
         getWeatherData(searchedArea);
         userSearchEl.value = '';
-        get5DayForcast(searchedArea);
+        // get5DayForcast(searchedArea);
     }
     else {
         alert("Please enter a valid city name");
+        return;
     }
+
 };
 
 //Display the retrieved Climate Data
@@ -135,9 +169,11 @@ let searchFormHandler = function (event) {
 
 // };
 
-searchFormEl.addEventListener("submit", searchFormHandler);
+searchBtn.addEventListener("click", searchFormHandler);
 
 searchLogBtn.addEventListener("click", function (event) {
+    event.preventDefault();
     let search = event.target.innerText;
     getWeatherData(search);
+
 });
