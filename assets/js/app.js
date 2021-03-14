@@ -168,8 +168,7 @@ let searchLog = function () {
         let key = localStorage.key(i);
         // console.log(localStorage.getItem(key));
         let currentSearchArea = JSON.parse(localStorage.getItem(key));
-        let tempArray = [];
-        tempArray[i] = JSON.parse(localStorage.getItem(key));
+
 
         let listEl = document.createElement("button");
         listEl.classList.add("list-group-item");
