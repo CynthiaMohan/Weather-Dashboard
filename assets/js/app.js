@@ -15,9 +15,9 @@ let searchBtn = document.querySelector('#searchBtn')
 let forecastEl = document.querySelector('.forecast')
 let lat, lon;
 let searchArray = [];
-let i = 0;
+let i = 0, count = 0;
 let date = moment().format("L");
-
+localStorage.clear()
 //api url
 const API_key = 'bd8df5439f0695bbedc7f6bb49854451';
 
@@ -120,6 +120,7 @@ let get5DayForcast = function (searchArea) {
 
 
                         if (data.list[i].dt_txt.includes("00:00:00")) {
+
                             let newDate = ((data.list[i].dt_txt).split(' '))[0];
                             let newMomentDate = moment(newDate).format("L");
                             // console.log(newMomentDate);
@@ -157,10 +158,19 @@ let get5DayForcast = function (searchArea) {
 
 
 let searchLog = function () {
+    for (let i = 0; i <= count; i++) {
+        console.log(searchListEl);
+        if (searchListEl.hasChildNodes()) {
+            searchListEl.removeChild(searchListEl.childNodes[0]);
+        }
+    }
     for (let i = 0; i < localStorage.length; i++) {
         let key = localStorage.key(i);
         // console.log(localStorage.getItem(key));
         let currentSearchArea = JSON.parse(localStorage.getItem(key));
+        let tempArray = [];
+        tempArray[i] = JSON.parse(localStorage.getItem(key));
+
         let listEl = document.createElement("button");
         listEl.classList.add("list-group-item");
         listEl.classList.add("list-element")
@@ -168,7 +178,7 @@ let searchLog = function () {
         // console.log(listEl);
         searchListEl.appendChild(listEl);
     }
-
+    // }
 };
 
 //Search Form Handler
@@ -180,7 +190,7 @@ let searchFormHandler = function () {
     i++;
     localStorage.setItem(i, JSON.stringify(searchedArea));
     searchLog();
-    // console.log(searchArray);
+    console.log(searchArray);
     dateEl.innerText = date;
     if (searchedArea) {
         getWeatherData(searchedArea);
@@ -195,8 +205,7 @@ let searchFormHandler = function () {
 
 //search button click event handler
 searchBtn.addEventListener("click", function () {
-    searchFormHandler();
-
+    searchFormHandler(); count++;
 });
 
 //search log button click event handler
@@ -204,7 +213,5 @@ searchLogBtn.addEventListener("click", function (event) {
     event.preventDefault();
     let search = event.target.innerText;
     getWeatherData(search);
-    // forecastEl.classList.add("hidden");
-    // debugger;
     get5DayForcast(search);
 });
