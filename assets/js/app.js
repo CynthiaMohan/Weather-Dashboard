@@ -24,7 +24,7 @@ const API_key = 'bd8df5439f0695bbedc7f6bb49854451';
 //Gather the search data
 let getWeatherData = function (searchArea) {
     //fetch the data by making a request to the url
-    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${searchArea}&appid=${API_key}&units=imperial`)
+    fetch(`http://api.openweathermap.org/data/2.5/weather?q=${searchArea}&appid=${API_key}&units=imperial`)
         .then(function (response) {
             // console.log(response);
             if (response.ok) {
