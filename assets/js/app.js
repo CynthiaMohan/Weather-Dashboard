@@ -121,11 +121,13 @@ let get5DayForcast = function (searchArea) {
 
                         if (data.list[i].dt_txt.includes("00:00:00")) {
                             let newDate = ((data.list[i].dt_txt).split(' '))[0];
+                            let newMomentDate = moment(newDate).format("L");
+                            // console.log(newMomentDate);
                             //create the element for the data to be displayed
                             let forecastItemEl = document.createElement("div");
                             forecastItemEl.classList.add("col");
                             forecastItemEl.classList.add("forecast-box");
-                            forecastItemEl.innerHTML = `<h4>${newDate}</h4>`;
+                            forecastItemEl.innerHTML = `<h4>${newMomentDate}</h4>`;
                             // forecastEl.appendChild(forecastItemEl);
                             //Weather Icon
                             let wicon = data.list[i].weather[0].icon;
@@ -203,6 +205,6 @@ searchLogBtn.addEventListener("click", function (event) {
     let search = event.target.innerText;
     getWeatherData(search);
     // forecastEl.classList.add("hidden");
-    debugger;
+    // debugger;
     get5DayForcast(search);
 });
