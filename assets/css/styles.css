@@ -12,7 +12,7 @@ header{
     margin-right: 10px;
 }
 .list-element{
-    width: 300px;
+    width: 350px;
     margin-left: 10px;
 }
 .col-container{
@@ -44,4 +44,8 @@ header{
     background-color: yellow;
     color: black;
     border-radius: 5px;
+}
+.list-box{
+    background-color: blue;
+    color: white;
 }

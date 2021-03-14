@@ -12,39 +12,42 @@ let dataEl = document.querySelector('#data');
 let weatherIconEl = document.querySelector('#weatherIcon');
 let searchLogBtn = document.querySelector('#search-log')
 let searchBtn = document.querySelector('#searchBtn')
+let forecastEl = document.querySelector('.forecast')
 let lat, lon;
 let searchArray = [];
+let i = 0;
+let date = moment().format("L");
+
 //api url
 const API_key = 'c55a6a193fb103621798dce241c8f1d3';
 
 //Gather the search data
 let getWeatherData = function (searchArea) {
-
     //fetch the data by making a request to the url
     fetch(`https://api.openweathermap.org/data/2.5/weather?q=${searchArea}&appid=${API_key}&units=imperial`)
         .then(function (response) {
-            console.log(response);
+            // console.log(response);
             if (response.ok) {
                 response.json().then(function (data) {
-                    console.log(data);
+                    // console.log(data);
                     searchCityDisplayEl.innerText = data.name;
-                    console.log(data.weather[0].main);
+                    // console.log(data.weather[0].main);
                     let wicon = data.weather[0].icon;
                     let iconUrl = `http://openweathermap.org/img/w/${wicon}.png`;
                     let temperature = data.main.temp;
                     let humidity = data.main.humidity;
                     let windSpeed = data.wind.speed;
-                    console.log(`Temperature : ${temperature}`);
+                    // console.log(`Temperature : ${temperature}`);
                     tempEl.innerText = temperature;
-                    console.log(`Humidity : ${humidity}`);
+                    // console.log(`Humidity : ${humidity}`);
                     humidityEl.innerText = humidity;
-                    console.log(`WindSpeed : ${windSpeed}`);
+                    // console.log(`WindSpeed : ${windSpeed}`);
                     windspeedEl.innerText = windSpeed;
                     //weather icon
                     weatherIconEl.setAttribute("src", iconUrl);
                     lat = data.coord.lat;
                     lon = data.coord.lon;
-                    console.log(lat, lon);
+                    // console.log(lat, lon);
                     fetch(`http://api.openweathermap.org/data/2.5/uvi?lat=${lat}&lon=${lon}&appid=${API_key}`)
                         .then(function (response) {
                             if (response) {
@@ -92,7 +95,7 @@ let getWeatherData = function (searchArea) {
             }
         })//end of then
         .catch(function (error) {
-            console.log(error);
+            // console.log(error);
             alert(`Unable to connect to Open Weather`);
         });
 
@@ -101,10 +104,15 @@ let getWeatherData = function (searchArea) {
 let get5DayForcast = function (searchArea) {
     // let forecastApiUrl = `api.openweathermap.org/data/2.5/forecast?q=${searchArea}&appid=${API_key}`;
 
-    // fetch(`api.openweathermap.org/data/2.5/forecast?q=London,us&mode=xml&appid=${API_key}`)
-    //     .then(function (response) {
-    //         console.log(response);
-    //     });
+    fetch(`http://api.openweathermap.org/data/2.5/forecast/daily?q=London&cnt=3&appid=c55a6a193fb103621798dce241c8f1d3&units=imperial`)
+        .then(function (response) {
+            if (response.ok) {
+                response.json().then(function (data) {
+                    console.log(data);
+
+                });
+            }
+        });
 };
 
 
@@ -123,41 +131,37 @@ let searchLog = function () {
 
 };
 
-let i = 0;
 //Search Form Handler
 let searchFormHandler = function () {
-
     dataEl.classList.remove("hidden");
-    // console.log(event); //Submit event
+    // console.log(event);
     let searchedArea = userSearchEl.value;
-    // searchArray[i] = searchedArea;
+    searchArray[i] = searchedArea;
     i++;
     localStorage.setItem(i, JSON.stringify(searchedArea));
     searchLog();
-
-    console.log(searchArray);//foster city
-    let date = moment().format("L");
+    // console.log(searchArray);
     dateEl.innerText = date;
     if (searchedArea) {
         getWeatherData(searchedArea);
         userSearchEl.value = '';
-        // get5DayForcast(searchedArea);
+        get5DayForcast(searchedArea);
     }
     else {
         alert("Please enter a valid city name");
         return;
     }
-
 };
 
+//search button click event handler
 searchBtn.addEventListener("click", function () {
     searchFormHandler();
 
 });
 
+//search log button click event handler
 searchLogBtn.addEventListener("click", function (event) {
     event.preventDefault();
     let search = event.target.innerText;
     getWeatherData(search);
-
 });
