@@ -19,7 +19,7 @@ let i = 0;
 let date = moment().format("L");
 
 //api url
-const API_key = 'c55a6a193fb103621798dce241c8f1d3';
+const API_key = 'bd8df5439f0695bbedc7f6bb49854451';
 
 //Gather the search data
 let getWeatherData = function (searchArea) {
@@ -104,15 +104,53 @@ let getWeatherData = function (searchArea) {
 let get5DayForcast = function (searchArea) {
     // let forecastApiUrl = `api.openweathermap.org/data/2.5/forecast?q=${searchArea}&appid=${API_key}`;
 
-    fetch(`http://api.openweathermap.org/data/2.5/forecast/daily?q=London&cnt=3&appid=c55a6a193fb103621798dce241c8f1d3&units=imperial`)
+    for (let i = 0; i <= 5; i++) {
+        console.log(forecastEl);
+        if (forecastEl.hasChildNodes()) {
+            forecastEl.removeChild(forecastEl.childNodes[0]);
+        }
+    }
+
+    fetch(`http://api.openweathermap.org/data/2.5/forecast?q=${searchArea}&appid=${API_key}&units=imperial`)
         .then(function (response) {
             if (response.ok) {
                 response.json().then(function (data) {
-                    console.log(data);
+                    // console.log(data);
+                    for (let i = 0; i < data.cnt; i++) {
 
+
+                        if (data.list[i].dt_txt.includes("00:00:00")) {
+                            let newDate = ((data.list[i].dt_txt).split(' '))[0];
+                            //create the element for the data to be displayed
+                            let forecastItemEl = document.createElement("div");
+                            forecastItemEl.classList.add("col");
+                            forecastItemEl.classList.add("forecast-box");
+                            forecastItemEl.innerHTML = `<h4>${newDate}</h4>`;
+                            // forecastEl.appendChild(forecastItemEl);
+                            //Weather Icon
+                            let wicon = data.list[i].weather[0].icon;
+                            let iconUrl = `http://openweathermap.org/img/w/${wicon}.png`;
+                            let weatherIconEl = document.createElement("div");
+                            weatherIconEl.innerHTML = `<img src="${iconUrl}" alt= "Weather icon">`;
+                            forecastItemEl.appendChild(weatherIconEl);
+                            //Temperature
+                            let tempEl = document.createElement("div");
+                            tempEl.innerHTML = `<p>Temp: ${data.list[i].main.temp}<span>&#176;F</span></p>`;
+                            forecastItemEl.appendChild(tempEl);
+                            //Humidity
+                            let humidEl = document.createElement("div");
+                            humidEl.innerHTML = `<p>Humidity:${data.list[i].main.humidity} %`;
+                            forecastItemEl.appendChild(humidEl);
+                            forecastEl.appendChild(forecastItemEl);
+                            // console.log(newDate);
+                        }
+                    }
                 });
+
             }
+
         });
+
 };
 
 
@@ -125,7 +163,7 @@ let searchLog = function () {
         listEl.classList.add("list-group-item");
         listEl.classList.add("list-element")
         listEl.innerText = currentSearchArea;
-        console.log(listEl);
+        // console.log(listEl);
         searchListEl.appendChild(listEl);
     }
 
@@ -164,4 +202,7 @@ searchLogBtn.addEventListener("click", function (event) {
     event.preventDefault();
     let search = event.target.innerText;
     getWeatherData(search);
+    // forecastEl.classList.add("hidden");
+    debugger;
+    get5DayForcast(search);
 });
