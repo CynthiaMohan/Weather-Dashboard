@@ -24,7 +24,7 @@ const API_key = 'bd8df5439f0695bbedc7f6bb49854451';
 //Gather the search data
 let getWeatherData = function (searchArea) {
     //fetch the data by making a request to the url
-    fetch(`http://api.openweathermap.org/data/2.5/weather?q=${searchArea}&appid=${API_key}&units=imperial`)
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${searchArea}&appid=${API_key}&units=imperial`)
         .then(function (response) {
             // console.log(response);
             if (response.ok) {
@@ -33,7 +33,7 @@ let getWeatherData = function (searchArea) {
                     searchCityDisplayEl.innerText = data.name;
                     // console.log(data.weather[0].main);
                     let wicon = data.weather[0].icon;
-                    let iconUrl = `http://openweathermap.org/img/w/${wicon}.png`;
+                    let iconUrl = `https://openweathermap.org/img/w/${wicon}.png`;
                     let temperature = data.main.temp;
                     let humidity = data.main.humidity;
                     let windSpeed = data.wind.speed;
@@ -48,7 +48,7 @@ let getWeatherData = function (searchArea) {
                     lat = data.coord.lat;
                     lon = data.coord.lon;
                     // console.log(lat, lon);
-                    fetch(`http://api.openweathermap.org/data/2.5/uvi?lat=${lat}&lon=${lon}&appid=${API_key}`)
+                    fetch(`https://api.openweathermap.org/data/2.5/uvi?lat=${lat}&lon=${lon}&appid=${API_key}`)
                         .then(function (response) {
                             if (response) {
                                 response.json().then(function (data) {
@@ -111,7 +111,7 @@ let get5DayForcast = function (searchArea) {
         }
     }
 
-    fetch(`http://api.openweathermap.org/data/2.5/forecast?q=${searchArea}&appid=${API_key}&units=imperial`)
+    fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${searchArea}&appid=${API_key}&units=imperial`)
         .then(function (response) {
             if (response.ok) {
                 response.json().then(function (data) {
@@ -132,7 +132,7 @@ let get5DayForcast = function (searchArea) {
                             // forecastEl.appendChild(forecastItemEl);
                             //Weather Icon
                             let wicon = data.list[i].weather[0].icon;
-                            let iconUrl = `http://openweathermap.org/img/w/${wicon}.png`;
+                            let iconUrl = `https://openweathermap.org/img/w/${wicon}.png`;
                             let weatherIconEl = document.createElement("div");
                             weatherIconEl.innerHTML = `<img src="${iconUrl}" alt= "Weather icon">`;
                             forecastItemEl.appendChild(weatherIconEl);
