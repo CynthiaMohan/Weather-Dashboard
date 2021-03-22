@@ -14,10 +14,11 @@ let searchLogBtn = document.querySelector('#search-log')
 let searchBtn = document.querySelector('#searchBtn')
 let forecastEl = document.querySelector('.forecast')
 let lat, lon;
-let searchArray = [];
+let searchArray = JSON.parse(localStorage.getItem("search")) || [];
+// console.log(searchArray);
 let i = 0, count = 0;
 let date = moment().format("L");
-localStorage.clear()
+// localStorage.clear()
 //api url
 const API_key = 'bd8df5439f0695bbedc7f6bb49854451';
 
@@ -105,7 +106,7 @@ let get5DayForcast = function (searchArea) {
     // let forecastApiUrl = `api.openweathermap.org/data/2.5/forecast?q=${searchArea}&appid=${API_key}`;
 
     for (let i = 0; i <= 5; i++) {
-        console.log(forecastEl);
+        // console.log(forecastEl);
         if (forecastEl.hasChildNodes()) {
             forecastEl.removeChild(forecastEl.childNodes[0]);
         }
@@ -159,25 +160,12 @@ let get5DayForcast = function (searchArea) {
 
 let searchLog = function () {
     for (let i = 0; i <= count; i++) {
-        console.log(searchListEl);
+        // console.log(searchListEl);
         if (searchListEl.hasChildNodes()) {
             searchListEl.removeChild(searchListEl.childNodes[0]);
         }
     }
-    for (let i = 0; i < localStorage.length; i++) {
-        let key = localStorage.key(i);
-        // console.log(localStorage.getItem(key));
-        let currentSearchArea = JSON.parse(localStorage.getItem(key));
-
-
-        let listEl = document.createElement("button");
-        listEl.classList.add("list-group-item");
-        listEl.classList.add("list-element")
-        listEl.innerText = currentSearchArea;
-        // console.log(listEl);
-        searchListEl.appendChild(listEl);
-    }
-    // }
+    display();
 };
 
 //Search Form Handler
@@ -185,11 +173,7 @@ let searchFormHandler = function () {
     dataEl.classList.remove("hidden");
     // console.log(event);
     let searchedArea = userSearchEl.value;
-    searchArray[i] = searchedArea;
-    i++;
-    localStorage.setItem(i, JSON.stringify(searchedArea));
-    searchLog();
-    console.log(searchArray);
+    searchArray.push(searchedArea);
     dateEl.innerText = date;
     if (searchedArea) {
         getWeatherData(searchedArea);
@@ -200,17 +184,44 @@ let searchFormHandler = function () {
         alert("Please enter a valid city name");
         return;
     }
+    localStorage.setItem("search", JSON.stringify(searchArray));
+    searchLog();
+
 };
+//search for elements in local storage and display
+let display = function () {
+
+    console.log(searchArray);
+    for (let i = 0; i < searchArray.length; i++) {
+        let listEl = document.createElement("button");
+        listEl.classList.add("list-group-item");
+        listEl.classList.add("list-element");
+        listEl.innerText = searchArray[i];
+        console.log(listEl);
+        searchListEl.appendChild(listEl);
+    }
+
+};
+
+
+searchLog();
 
 //search button click event handler
 searchBtn.addEventListener("click", function () {
-    searchFormHandler(); count++;
+    searchFormHandler();
 });
 
 //search log button click event handler
 searchLogBtn.addEventListener("click", function (event) {
-    event.preventDefault();
     let search = event.target.innerText;
+    console.log(search);
     getWeatherData(search);
     get5DayForcast(search);
+});
+document.addEventListener("mouseover", function () {
+    if (searchArray.length > 0) {
+        console.log(searchArray[searchArray.length - 1]);
+        getWeatherData(searchArray[searchArray.length - 1]);
+        get5DayForcast(searchArray[searchArray.length - 1]);
+    }
 });

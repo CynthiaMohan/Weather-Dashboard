@@ -12,7 +12,7 @@ header{
     margin-right: 10px;
 }
 .list-element{
-    width: 350px;
+    /* width: 350px; */
     margin-left: 10px;
 }
 .col-container{
@@ -22,7 +22,7 @@ header{
     width: 100px;
 }
 #searchForCity{
-    width: 300px;
+    /* width: auto; */
 }
 
 .red{
@@ -50,4 +50,7 @@ header{
     color: white;
     border-radius: 5px;
     margin: 10px;
+}
+#search-log{
+    /* width: auto; */
 }
