@@ -10,9 +10,10 @@ let searchCityDisplayEl = document.querySelector('#searchcity');
 let dateEl = document.querySelector('#date');
 let dataEl = document.querySelector('#data');
 let weatherIconEl = document.querySelector('#weatherIcon');
-let searchLogBtn = document.querySelector('#search-log')
-let searchBtn = document.querySelector('#searchBtn')
-let forecastEl = document.querySelector('.forecast')
+let searchLogBtn = document.querySelector('#search-log');
+let searchBtn = document.querySelector('#searchBtn');
+let forecastEl = document.querySelector('.forecast');
+let resetEl = document.querySelector('#reset');
 let lat, lon;
 let searchArray = JSON.parse(localStorage.getItem("search")) || [];
 // console.log(searchArray);
@@ -171,9 +172,21 @@ let searchLog = function () {
 //Search Form Handler
 let searchFormHandler = function () {
     dataEl.classList.remove("hidden");
+
     // console.log(event);
     let searchedArea = userSearchEl.value;
     searchArray.push(searchedArea);
+    //searching for duplicates
+    if (searchArray.length != 0) {
+        for (let i = 0; i < searchArray.length; i++) {
+            for (let j = i + 1; j < searchArray.length; j++) {
+                if (searchArray[i] === searchArray[j]) {
+                    searchArray.pop();
+                }
+            }
+        }
+    }
+
     dateEl.innerText = date;
     if (searchedArea) {
         getWeatherData(searchedArea);
@@ -184,12 +197,19 @@ let searchFormHandler = function () {
         alert("Please enter a valid city name");
         return;
     }
+
+
     localStorage.setItem("search", JSON.stringify(searchArray));
     searchLog();
 
 };
 //search for elements in local storage and display
 let display = function () {
+    // debugger;
+
+    while (searchListEl.hasChildNodes()) {
+        searchListEl.removeChild(searchListEl.firstChild);
+    }
 
     console.log(searchArray);
     for (let i = 0; i < searchArray.length; i++) {
@@ -197,15 +217,18 @@ let display = function () {
         listEl.classList.add("list-group-item");
         listEl.classList.add("list-element");
         listEl.innerText = searchArray[i];
-        console.log(listEl);
+        // console.log(listEl);
         searchListEl.appendChild(listEl);
     }
+
 
 };
 
 
 searchLog();
-
+if (searchArray.length > 0) {
+    getWeatherData(searchArray[searchArray.length - 1]);
+}
 //search button click event handler
 searchBtn.addEventListener("click", function () {
     searchFormHandler();
@@ -215,13 +238,15 @@ searchBtn.addEventListener("click", function () {
 searchLogBtn.addEventListener("click", function (event) {
     let search = event.target.innerText;
     console.log(search);
+    dataEl.classList.remove("hidden");
     getWeatherData(search);
     get5DayForcast(search);
 });
-document.addEventListener("mouseover", function () {
-    if (searchArray.length > 0) {
-        console.log(searchArray[searchArray.length - 1]);
-        getWeatherData(searchArray[searchArray.length - 1]);
-        get5DayForcast(searchArray[searchArray.length - 1]);
+resetEl.addEventListener("click", function () {
+    localStorage.clear();
+    while (searchListEl.hasChildNodes()) {
+        searchListEl.removeChild(searchListEl.firstChild);
     }
+    searchArray = [];
+    dataEl.classList.add("hidden");
 });
